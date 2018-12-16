@@ -22,13 +22,10 @@ namespace DMToolsWinApp
         {
 
             InitializeComponent();
-            Folder_cb.Items.AddRange(new object[] { "C:\\Users\\gameb\\Documents" });
-            Folder_cb.SelectedIndex = 0;
-
-            string folder = Folder_cb.Text;
-            string[] txtfiles = Directory.GetFiles(folder, "*.txt").Select(fi => Path.GetFileName(fi)).ToArray();
-            File_cb.Items.AddRange(txtfiles);
-            File_cb.SelectedIndex = 0;
+            //init folderlist
+            var temp = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            UpdateFolderList(temp);
+            UpdateFileList();
         }
 
         private void UpdateFullFilePath()
@@ -41,6 +38,28 @@ namespace DMToolsWinApp
             string fileText = TxtFileMan.ReadFromFile();
             string editorText = Text_rtb.Text;
             return fileText != editorText;
+        }
+        
+        private void UpdateFolderList(string input)
+        {
+            List<string> folders = new List<string> { input };
+            folders.AddRange(Directory.GetDirectories(input).ToList());
+            Folder_cb.DataSource = folders;
+            if (folders.Count() != 0)
+            {
+                Folder_cb.SelectedIndex = 0;
+            }
+        }
+
+        private void UpdateFileList()
+        {
+            string folder = Folder_cb.Text;
+            string[] txtfiles = Directory.GetFiles(folder, "*.txt").Select(fi => Path.GetFileName(fi)).ToArray();
+            File_cb.DataSource = txtfiles;
+            if (txtfiles.Length != 0)
+            {
+                File_cb.SelectedIndex = 0;
+            }
         }
 
         private void LoadText_b_Click(object sender, EventArgs e)
@@ -66,14 +85,27 @@ namespace DMToolsWinApp
 
         private void Folder_cb_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //update the file combobox
+            //check if there are changes in the file editor and prompt to save
+            //checking here so that we can preemptively change the fullfilepath
+            //instead of reactively
 
+            //update the file combobox
+            UpdateFileList();
         }
 
         private void File_cb_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //check if there are changes in the file editor and prompt to save
             //auto load the doc or no?
+        }
+
+        private void BrowseFolder_b_Click(object sender, EventArgs e)
+        {
+            if (FolderBrowser.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string tempPath = FolderBrowser.SelectedPath;
+                //update folder list
+                UpdateFolderList(tempPath);
+            }
         }
     }
 }

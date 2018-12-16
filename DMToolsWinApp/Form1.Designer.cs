@@ -39,6 +39,8 @@
             this.File_cb = new System.Windows.Forms.ComboBox();
             this.Folder_cb = new System.Windows.Forms.ComboBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.FolderBrowser = new System.Windows.Forms.FolderBrowserDialog();
+            this.BrowseFolder_b = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.SuspendLayout();
@@ -67,6 +69,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.BrowseFolder_b);
             this.tabPage1.Controls.Add(this.SaveText_b);
             this.tabPage1.Controls.Add(this.LoadText_b);
             this.tabPage1.Controls.Add(this.Text_rtb);
@@ -161,6 +164,20 @@
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // FolderBrowser
+            // 
+            this.FolderBrowser.RootFolder = System.Environment.SpecialFolder.MyComputer;
+            // 
+            // BrowseFolder_b
+            // 
+            this.BrowseFolder_b.Location = new System.Drawing.Point(311, 7);
+            this.BrowseFolder_b.Name = "BrowseFolder_b";
+            this.BrowseFolder_b.Size = new System.Drawing.Size(75, 23);
+            this.BrowseFolder_b.TabIndex = 7;
+            this.BrowseFolder_b.Text = "Browse";
+            this.BrowseFolder_b.UseVisualStyleBackColor = true;
+            this.BrowseFolder_b.Click += new System.EventHandler(this.BrowseFolder_b_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -190,6 +207,8 @@
         private System.Windows.Forms.RichTextBox Text_rtb;
         private System.Windows.Forms.Button SaveText_b;
         private System.Windows.Forms.Button LoadText_b;
+        private System.Windows.Forms.FolderBrowserDialog FolderBrowser;
+        private System.Windows.Forms.Button BrowseFolder_b;
     }
 }
 
