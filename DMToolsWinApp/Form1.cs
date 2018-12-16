@@ -17,6 +17,7 @@ namespace DMToolsWinApp
     {
         Logic.TextFileManager TxtFileMan;
         string FullFilePath;
+
         public Form1()
         {
 
@@ -35,6 +36,13 @@ namespace DMToolsWinApp
             FullFilePath = Folder_cb.Text + @"\" + File_cb.Text;
         }
 
+        private bool IsTextEditorDifferent()
+        {
+            string fileText = TxtFileMan.ReadFromFile();
+            string editorText = Text_rtb.Text;
+            return fileText != editorText;
+        }
+
         private void LoadText_b_Click(object sender, EventArgs e)
         {
             UpdateFullFilePath();
@@ -48,7 +56,24 @@ namespace DMToolsWinApp
             UpdateFullFilePath();
             TxtFileMan = new TextFileManager(FullFilePath);
             string tempText = Text_rtb.Text;
-            TxtFileMan.WriteToFile(tempText);
+
+            //Are there actually changes to save?
+            if (IsTextEditorDifferent())
+            {
+                TxtFileMan.WriteToFile(tempText);
+            }
+        }
+
+        private void Folder_cb_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //update the file combobox
+
+        }
+
+        private void File_cb_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //check if there are changes in the file editor and prompt to save
+            //auto load the doc or no?
         }
     }
 }

@@ -140,6 +140,7 @@
             this.File_cb.Name = "File_cb";
             this.File_cb.Size = new System.Drawing.Size(231, 21);
             this.File_cb.TabIndex = 1;
+            this.File_cb.SelectedIndexChanged += new System.EventHandler(this.File_cb_SelectedIndexChanged);
             // 
             // Folder_cb
             // 
@@ -148,6 +149,7 @@
             this.Folder_cb.Name = "Folder_cb";
             this.Folder_cb.Size = new System.Drawing.Size(231, 21);
             this.Folder_cb.TabIndex = 0;
+            this.Folder_cb.SelectedIndexChanged += new System.EventHandler(this.Folder_cb_SelectedIndexChanged);
             // 
             // tabPage2
             // 
