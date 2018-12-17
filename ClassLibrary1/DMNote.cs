@@ -7,11 +7,17 @@ namespace Logic
     public class DMNote
     {
         public int ID { get; set; }
+        public int CampaignID { get; set; }
         public string Text { get; set; }
         public string Title { get; set; }
 
-        public DMNote(int id) => ID = id;
-        public DMNote(int id, string text) : this(id) => Text = text;
-        public DMNote(int id, string text, string title) : this(id, text) => Title = title;
+        public DMNote(int id, int campID)
+        {
+            ID = id;
+            CampaignID = campID;
+        }
+
+        public DMNote(int id, int campID, string text) : this(id, campID) => Text = text;
+        public DMNote(int id, int campID, string text, string title) : this(id, campID, text) => Title = title;
     }
 }

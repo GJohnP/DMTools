@@ -23,26 +23,45 @@ namespace DMToolsWinApp
     {
         Logic.TextFileManager TxtFileMan;
         string FullFilePath;
-        List<DMNote> Notes = new List<DMNote>();
+        string connectionString = ConfigurationManager.ConnectionStrings["Test"].ConnectionString;
+        List<DMNote> GlobalNotes = new List<DMNote>();
 
         public Form1()
         {
             List<string> output = new List<string>();
             InitializeComponent();
+            List<string> campIDs = new List<string>();
 
-            var connectionString = ConfigurationManager.ConnectionStrings["Test"].ConnectionString;
-            string queryString = "SELECT Id, Text FROM dbo.Note;";
+            string campQuery = "SELECT * FROM dbo.Campaign";
+            string noteQuery = "SELECT * FROM dbo.Note WHERE CampaignID = 1";
             using (var conn = new SqlConnection(connectionString))
             {
-                SqlCommand command = new SqlCommand(queryString, conn);
+                SqlCommand command = new SqlCommand(campQuery, conn);
                 conn.Open();
+
                 SqlDataReader reader = command.ExecuteReader();
+
+                try
+                {
+                    while (reader.Read())
+                    {
+                        campIDs.Add(reader["ID"].ToString());
+                    }
+                }
+                finally
+                {
+                    reader.Close();
+                }
+
+                command = new SqlCommand(noteQuery, conn);
+                reader = command.ExecuteReader();
+
                 try
                 {
                     while (reader.Read())
                     {
                         output.Add(reader["Id"] + "\t" + reader["Text"]);
-                        Notes.Add(new DMNote(int.Parse(reader["ID"].ToString()), reader["Text"].ToString()));
+                        GlobalNotes.Add(new DMNote(Convert.ToInt32(reader["ID"].ToString()), Convert.ToInt32(reader["CampaignID"]), reader["Text"].ToString(), reader["Title"].ToString()));
                     }
                 }
                 finally
@@ -55,14 +74,16 @@ namespace DMToolsWinApp
 
             //init folderlist
             //var temp = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            UpdateFolderList(Notes.Select(n => n.ID.ToString()).ToList());
+            Campaign_cb.DataSource = campIDs;
+            Note_cb.DataSource = GlobalNotes.Select(n => n.ID.ToString() + "\t" + n.Title).ToList();
+
             //UpdateFolderList(temp);
             //UpdateFileList();
         }
 
         private void UpdateFullFilePath()
         {
-            FullFilePath = Folder_cb.Text + @"\" + File_cb.Text;
+            FullFilePath = Campaign_cb.Text + @"\" + Note_cb.Text;
         }
 
         private bool IsTextEditorDifferent()
@@ -72,31 +93,34 @@ namespace DMToolsWinApp
             return fileText != editorText;
         }
 
-        private void UpdateFolderList(List<string> list)
+        private void UpdateNoteCB()
         {
-            Folder_cb.DataSource = list;
-        }
+            GlobalNotes = new List<DMNote>();
 
-        private void UpdateFolderList(string input)
-        {
-            List<string> folders = new List<string> { input };
-            folders.AddRange(Directory.GetDirectories(input).ToList());
-            Folder_cb.DataSource = folders;
-            if (folders.Count() != 0)
-            {
-                Folder_cb.SelectedIndex = 0;
-            }
-        }
+            int campID = Convert.ToInt32(Campaign_cb.SelectedValue);
 
-        private void UpdateFileList()
-        {
-            string folder = Folder_cb.Text;
-            string[] txtfiles = Directory.GetFiles(folder, "*.txt").Select(fi => Path.GetFileName(fi)).ToArray();
-            File_cb.DataSource = txtfiles;
-            if (txtfiles.Length != 0)
+            string noteQuery = string.Format("SELECT * FROM dbo.Note WHERE CampaignID = {0}", campID);
+            using (var conn = new SqlConnection(connectionString))
             {
-                File_cb.SelectedIndex = 0;
+                SqlCommand command = new SqlCommand(noteQuery, conn);
+                conn.Open();
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                try
+                {
+                    while (reader.Read())
+                    {
+                        GlobalNotes.Add(new DMNote(Convert.ToInt32(reader["ID"].ToString()), Convert.ToInt32(reader["CampaignID"]), reader["Text"].ToString(), reader["Title"].ToString()));
+                    }
+                }
+                finally
+                {
+                    reader.Close();
+                }
             }
+
+            Note_cb.DataSource = GlobalNotes.Select(n => n.ID.ToString() + "\t" + n.Title).ToList();
         }
 
         private void LoadText_b_Click(object sender, EventArgs e)
@@ -106,7 +130,7 @@ namespace DMToolsWinApp
             //string tempText = TxtFileMan.ReadFromFile();
             //Text_rtb.Text = tempText;
 
-            string tempText = Notes.Where(n => n.ID == Convert.ToInt32(Folder_cb.SelectedValue)).FirstOrDefault()?.Text;
+            string tempText = GlobalNotes.Where(n => n.ID == Convert.ToInt32(Campaign_cb.SelectedValue)).FirstOrDefault()?.Text;
             Text_rtb.Text = tempText;
         }
 
@@ -123,17 +147,17 @@ namespace DMToolsWinApp
             //}
         }
 
-        private void Folder_cb_SelectedIndexChanged(object sender, EventArgs e)
+        private void Campaign_cb_SelectedIndexChanged(object sender, EventArgs e)
         {
             //check if there are changes in the file editor and prompt to save
             //checking here so that we can preemptively change the fullfilepath
             //instead of reactively
 
-            //update the file combobox
-            //UpdateFileList();
+            //update the note combobox
+            UpdateNoteCB();
         }
 
-        private void File_cb_SelectedIndexChanged(object sender, EventArgs e)
+        private void Note_cb_SelectedIndexChanged(object sender, EventArgs e)
         {
             //auto load the doc or no?
         }

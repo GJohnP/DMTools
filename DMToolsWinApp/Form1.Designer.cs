@@ -31,16 +31,16 @@
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.BrowseFolder_b = new System.Windows.Forms.Button();
             this.SaveText_b = new System.Windows.Forms.Button();
             this.LoadText_b = new System.Windows.Forms.Button();
             this.Text_rtb = new System.Windows.Forms.RichTextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.File_cb = new System.Windows.Forms.ComboBox();
-            this.Folder_cb = new System.Windows.Forms.ComboBox();
+            this.Note_cb = new System.Windows.Forms.ComboBox();
+            this.Campaign_cb = new System.Windows.Forms.ComboBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.FolderBrowser = new System.Windows.Forms.FolderBrowserDialog();
-            this.BrowseFolder_b = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.SuspendLayout();
@@ -75,8 +75,8 @@
             this.tabPage1.Controls.Add(this.Text_rtb);
             this.tabPage1.Controls.Add(this.label2);
             this.tabPage1.Controls.Add(this.label1);
-            this.tabPage1.Controls.Add(this.File_cb);
-            this.tabPage1.Controls.Add(this.Folder_cb);
+            this.tabPage1.Controls.Add(this.Note_cb);
+            this.tabPage1.Controls.Add(this.Campaign_cb);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -84,6 +84,16 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // BrowseFolder_b
+            // 
+            this.BrowseFolder_b.Location = new System.Drawing.Point(311, 7);
+            this.BrowseFolder_b.Name = "BrowseFolder_b";
+            this.BrowseFolder_b.Size = new System.Drawing.Size(75, 23);
+            this.BrowseFolder_b.TabIndex = 7;
+            this.BrowseFolder_b.Text = "Browse";
+            this.BrowseFolder_b.UseVisualStyleBackColor = true;
+            this.BrowseFolder_b.Click += new System.EventHandler(this.BrowseFolder_b_Click);
             // 
             // SaveText_b
             // 
@@ -123,36 +133,36 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(18, 37);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(23, 13);
+            this.label2.Size = new System.Drawing.Size(30, 13);
             this.label2.TabIndex = 3;
-            this.label2.Text = "File";
+            this.label2.Text = "Note";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(18, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(49, 13);
+            this.label1.Size = new System.Drawing.Size(54, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Directory";
+            this.label1.Text = "Campaign";
             // 
-            // File_cb
+            // Note_cb
             // 
-            this.File_cb.FormattingEnabled = true;
-            this.File_cb.Location = new System.Drawing.Point(73, 34);
-            this.File_cb.Name = "File_cb";
-            this.File_cb.Size = new System.Drawing.Size(231, 21);
-            this.File_cb.TabIndex = 1;
-            this.File_cb.SelectedIndexChanged += new System.EventHandler(this.File_cb_SelectedIndexChanged);
+            this.Note_cb.FormattingEnabled = true;
+            this.Note_cb.Location = new System.Drawing.Point(73, 34);
+            this.Note_cb.Name = "Note_cb";
+            this.Note_cb.Size = new System.Drawing.Size(231, 21);
+            this.Note_cb.TabIndex = 1;
+            this.Note_cb.SelectedIndexChanged += new System.EventHandler(this.Note_cb_SelectedIndexChanged);
             // 
-            // Folder_cb
+            // Campaign_cb
             // 
-            this.Folder_cb.FormattingEnabled = true;
-            this.Folder_cb.Location = new System.Drawing.Point(73, 6);
-            this.Folder_cb.Name = "Folder_cb";
-            this.Folder_cb.Size = new System.Drawing.Size(231, 21);
-            this.Folder_cb.TabIndex = 0;
-            this.Folder_cb.SelectedIndexChanged += new System.EventHandler(this.Folder_cb_SelectedIndexChanged);
+            this.Campaign_cb.FormattingEnabled = true;
+            this.Campaign_cb.Location = new System.Drawing.Point(73, 6);
+            this.Campaign_cb.Name = "Campaign_cb";
+            this.Campaign_cb.Size = new System.Drawing.Size(231, 21);
+            this.Campaign_cb.TabIndex = 0;
+            this.Campaign_cb.SelectedIndexChanged += new System.EventHandler(this.Campaign_cb_SelectedIndexChanged);
             // 
             // tabPage2
             // 
@@ -167,16 +177,6 @@
             // FolderBrowser
             // 
             this.FolderBrowser.RootFolder = System.Environment.SpecialFolder.MyComputer;
-            // 
-            // BrowseFolder_b
-            // 
-            this.BrowseFolder_b.Location = new System.Drawing.Point(311, 7);
-            this.BrowseFolder_b.Name = "BrowseFolder_b";
-            this.BrowseFolder_b.Size = new System.Drawing.Size(75, 23);
-            this.BrowseFolder_b.TabIndex = 7;
-            this.BrowseFolder_b.Text = "Browse";
-            this.BrowseFolder_b.UseVisualStyleBackColor = true;
-            this.BrowseFolder_b.Click += new System.EventHandler(this.BrowseFolder_b_Click);
             // 
             // Form1
             // 
@@ -200,8 +200,8 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.ComboBox Folder_cb;
-        private System.Windows.Forms.ComboBox File_cb;
+        private System.Windows.Forms.ComboBox Campaign_cb;
+        private System.Windows.Forms.ComboBox Note_cb;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RichTextBox Text_rtb;
